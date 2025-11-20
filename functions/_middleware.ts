@@ -34,6 +34,13 @@ function isPublicPath(pathname: string): boolean {
 
 export async function onRequest(context: any) {
   const { request, env } = context;
+  const host = request.headers.get('host');
+
+  // 如果是默认的 pages.dev 域名，返回 403
+  if (host?.endsWith('.pages.dev')) {
+    return new Response('Access denied', { status: 403 });
+  }
+  
   const password = env.PASSWORD;
 
   if (typeof password !== "string") {
